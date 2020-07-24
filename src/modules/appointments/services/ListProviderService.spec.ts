@@ -4,7 +4,7 @@ import ListProviderService from '@modules/appointments/services/ListProviderServ
 let fakeUsersRepository: FakeUsersRepository;
 let listProviderService: ListProviderService;
 
-describe('ShowProfileService', () => {
+describe('ListProviderService', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
     listProviderService = new ListProviderService(fakeUsersRepository);
