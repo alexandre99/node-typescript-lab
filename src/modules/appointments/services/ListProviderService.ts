@@ -2,7 +2,6 @@ import { inject, injectable } from 'tsyringe';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
-import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/User';
 
 interface IRequest {
@@ -10,20 +9,17 @@ interface IRequest {
 }
 
 @injectable()
-class ShowProfileService {
+class ListProviderService {
   constructor(
     @inject('UsersRepository') private usersRepository: IUsersRepository,
   ) {}
 
-  public async execute({ userId }: IRequest): Promise<User> {
-    const user = await this.usersRepository.findById(userId);
-
-    if (!user) {
-      throw new AppError('User not found');
-    }
-
-    return user;
+  public async execute({ userId }: IRequest): Promise<User[]> {
+    const users = await this.usersRepository.findAllProviders({
+      exceptUserId: userId,
+    });
+    return users;
   }
 }
 
-export default ShowProfileService;
+export default ListProviderService;
