@@ -16,16 +16,16 @@ class AppointmentsRepository implements IAppointmentsRepository {
 
   public async create({
     providerId,
+    userId,
     date,
   }: ICreateAppointmentDTO): Promise<Appointment> {
-    const appointment = this.ormRepository.create({ providerId, date });
+    const appointment = this.ormRepository.create({ providerId, userId, date });
     await this.ormRepository.save(appointment);
     return appointment;
   }
 
   public async findByDate(date: Date): Promise<Appointment | undefined> {
-    const findAppointment = await this.ormRepository.findOne({ where: date });
-    return findAppointment;
+    return this.ormRepository.findOne({ where: { date } });
   }
 
   public async findAllInMonthFromProvider({
@@ -39,7 +39,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
         providerId,
         date: Raw(
           dateFieldName =>
-            `to_chat(${dateFieldName}, 'MM-YYYY) = '${parsedMonth}-${year}'`,
+            `to_char(${dateFieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`,
         ),
       },
     });
@@ -59,7 +59,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
         providerId,
         date: Raw(
           dateFieldName =>
-            `to_chat(${dateFieldName}, 'DD-MM-YYYY) = '${parsedDay}-${parsedMonth}-${year}'`,
+            `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
     });
