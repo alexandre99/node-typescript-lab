@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { errors } from 'celebrate';
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import 'reflect-metadata';
@@ -15,6 +16,8 @@ const app = express();
 app.use(express.json());
 app.use('/files', express.static(uploadConfig.uploadsFolder));
 app.use(routes);
+
+app.use(errors());
 
 app.use(
   (error: Error, request: Request, response: Response, _: NextFunction) => {
